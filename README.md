@@ -1,4 +1,6 @@
-# Hamyan Product Package
+# Hamyan Product Package (A Scrape)
+
+#### Note: _This repository is a scrape version of the original code base and just for demo; the original one is private due to an NDA._
 
 This is the code-base of all Hamyan products. Hamyan Product Family is a fintech solution in crowdsourcing and socio-financial credit, which helps people to uplift themselves financially and in-association with other individuals but in a complete independent manner.
 
