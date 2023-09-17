@@ -1,0 +1,31 @@
+{% extends "admin/base_site.html" %}
+{% block content %}
+<fieldset class="module aligned">
+    <h2>Send notification to members</h2>
+    <form action="{% url 'account:admin:send-message' %}" method='POST'>
+    {% csrf_token %}
+        <table>
+        <tr>
+            <th style="text-align: center;">phone numbers</th>
+            <th style="text-align: center;">content</th>
+            <th style="text-align: center;">action</th>
+            <th style="text-align: center;">param</th>
+        </tr>
+        <tr>
+            <td>{{form.phone_numbers}}</td>
+            <td>{{form.content}}</td>
+            <td>{{form.action}}</td>
+            <td>{{form.param}}</td>
+        </tr>
+        </table>
+        <br>
+        {% for member_id in members_id %}
+            <input type="hidden" id="members" name="members" value="{{member_id}}">
+        {% endfor %}
+        <input style="width:100%" type="submit" value="send">
+    </form>
+</fieldset>
+<script>
+    document.getElementById('id_phone_numbers').value = "{{ phone_numbers }}"
+</script>
+{% endblock content %}

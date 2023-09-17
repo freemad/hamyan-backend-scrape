@@ -1,0 +1,73 @@
+{% extends 'admin/base_site.html' %}
+
+{% block breadcrumbs %}
+    <div class="breadcrumbs">
+    <a href="/hamyanadmin/">Home</a>
+    › <a href="/hamyanadmin/rosca_management/">Rosca_Management</a>
+    › Create Roscabox
+    </div>
+{% endblock %}
+
+
+{% block content %}
+
+
+<div id="content">
+
+{{box}}
+<br>
+<br>
+<br>
+<br>
+<br>
+<center>
+<form action="" method="post">
+    {% csrf_token %}
+    {{formset.management_form}}
+    <table>
+        <thead>
+            <tr>
+    
+                <th>
+                    index
+                </th>
+                <th>
+                    phone number
+                </th>
+                <th>
+                    first name
+                </th>
+                <th>
+                    last name
+                </th>
+            </tr>
+        </thead>
+        {% for form in formset %}
+        <tr style="text-align: center;">
+            <td>
+                <b>
+                {{forloop.counter}}
+                </b>
+            </td>
+            <td>
+                {{form.phone_number}}
+            </td>
+            <td>
+                {{form.first_name}}
+            </td>
+            <td>
+                {{form.last_name}}
+            </td>
+        </tr>
+        {% endfor %}
+    </table>
+    <br>
+    <br>
+    <input type="submit" value="save" style="width: 100px;">
+</form>
+</center>
+
+
+</div>
+
+{% endblock %}

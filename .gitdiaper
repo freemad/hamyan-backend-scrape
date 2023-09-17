@@ -1,0 +1,147 @@
+#!/bin/bash
+
+OK=0
+FAIL=1
+MISUSE=2
+
+reset='\033[00m'
+green='\033[01;32m'
+red='\033[01;31m'
+move='\033[25G'$reset
+clr='\033[K'
+
+#LOG=diaper.log
+VERBOSE=false
+CONTINUE=false
+AWESOME=false
+STATUS=$OK
+COUNT=0
+FAILS=0
+MSG=""
+
+function usage {
+	echo "usage: git diaper [<options>]"
+	echo
+	echo "    -a	awesomeness"
+	echo "    -c	continue when errors occur"
+	echo "    -h	displays this help"
+	echo "    -v	verbose mode"
+	echo
+}
+
+while getopts :vach opt; do
+	case $opt in
+		a)
+			AWESOME=true
+			;;
+		c)
+			CONTINUE=true
+			;;
+		v)
+			VERBOSE=true
+			;;
+		h)
+			usage
+			exit 0
+			;;
+		*)
+			echo "Invalid option: -$OPTARG" >&2	
+			usage
+			exit $MISUSE
+			;;
+	esac
+done
+
+function check {
+	name=$1; shift
+	echo -en "$name... \r"
+	fail=failure; succ=success
+	if [ "$1" == "!" ]; then
+		fail=success; succ=failure
+		shift
+	fi
+	if $VERBOSE; then
+		$@ && $succ || $fail
+	else
+		$@ &>/dev/null && $succ || $fail
+	fi
+}
+
+function failure {
+	echo -e "${clr}${name}: ${move}[${red}FAIL${reset}]"
+	STATUS=$FAIL
+	COUNT=`expr $COUNT + 1`
+	FAILS=`expr $FAILS + 1`
+	MSG=$MSG"${red}x${reset}"
+	[ "$CONTINUE" == false ] && caution && exit $STATUS
+	return 0
+}
+
+function success {
+	echo -e "${clr}${name}: ${move}[${green}OK${reset}]"
+	COUNT=`expr $COUNT + 1`
+	MSG=$MSG"${green}o${reset}"
+	return 0
+}
+
+function cheer {
+	echo
+	if $AWESOME; then
+		echo -e "Legen... wait for it... Dary!"
+		echo -e "$MSG"
+		echo -e "${green}\\:D/${reset}"
+	else
+		echo -ne "[${green}PASSED${reset}]"
+		$VERBOSE && echo -e " $MSG" || echo
+	fi
+}
+
+function caution {
+	echo
+	if $AWESOME; then
+		echo -e "You ${red}SUCK${reset} bro..."
+		echo -e "$MSG"
+		echo -e "${red}:|${reset}"
+	else
+		echo -ne "[${red}FAILED${reset}]"
+		$VERBOSE && echo -e " $MSG" || echo
+		echo -e "${red}Don't push it!${reset}"
+	fi
+}
+
+function gitrepo { 
+	root=`git rev-parse --show-toplevel 2> /dev/null`
+	ret=$?
+	if [ $ret -ne 0 ]; then
+		echo "You are not in a git repository"
+		return $ret
+	fi
+	cd $root
+	return $?
+}
+
+function requirements {
+	pip freeze > diaper.tmp
+	diff -s diaper.tmp requirements.txt
+	ret=$?
+	rm diaper.tmp
+	return $ret
+}
+
+
+trap 'kill -s 9 $$' SIGINT SIGTERM
+
+check "Git Repo" gitrepo
+check "Virtual Env" ! [ -z $VIRTUAL_ENV ]
+check "Requirements" requirements
+check "Flake8" flake8 .
+check "Make migrations" python manage.py makemigrations
+check "Migrate" python manage.py migrate
+check "Tests" coverage run --source="" manage.py test
+check "Coverage" coverage report --fail-under=0 -m
+check "Collect static" python manage.py collectstatic --noinput
+check "Check" python manage.py check
+
+[ $STATUS -eq 0 ] && cheer || caution
+exit $STATUS
+

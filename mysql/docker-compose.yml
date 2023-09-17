@@ -1,0 +1,48 @@
+version: '3.2'
+services:
+  mysql-master:
+    image: hmdocker.hamyanapp.com/mysql
+    command:
+      - "--default-authentication-plugin=mysql_native_password"
+      - "--log-bin=/var/lib/mysql/mysql-bin.log"
+    networks:
+      - traefik-public
+    environment:
+      MYSQL_ROOT_PASSWORD: pNFdaJuhQmhoMyzqbqnnrfSfZA1FlRwPb3kBGn8u
+    deploy:
+      placement:
+        constraints:
+          - node.role == manager
+    volumes:
+      - mysqlvolume:/var/lib/mysql
+      - ./master/scripts:/docker-entrypoint-initdb.d
+      - ./master/conf.d:/etc/mysql/conf.d
+
+  mysql-slave:
+    image: hmdocker.hamyanapp.com/mysql
+    command:
+      - "--default-authentication-plugin=mysql_native_password"
+      - "--log-bin=/var/lib/mysql/mysql-bin.log"
+    networks:
+      - traefik-public
+    environment:
+      MYSQL_ROOT_PASSWORD: pNFdaJuhQmhoMyzqbqnnrfSfZA1FlRwPb3kBGn8u
+    deploy:
+      placement:
+        constraints:
+          - node.hostname == hamyan-slave
+    volumes:
+      - mysqlslavevolume:/var/lib/mysql
+      - ./slave/scripts:/docker-entrypoint-initdb.d
+      - ./slave/conf.d:/etc/mysql/conf.d
+    depends_on:
+      - mysql
+
+networks:
+  traefik-public:
+    external: true
+
+
+volumes:
+  mysqlvolume:
+  mysqlslavevolume:

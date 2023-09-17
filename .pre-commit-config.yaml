@@ -1,0 +1,6 @@
+repos:
+-   repo: http://git.hamyanapp.com/core/hamyan-backend.git
+    rev: stable
+    hooks:
+    - id: black
+      language_version: python3.6

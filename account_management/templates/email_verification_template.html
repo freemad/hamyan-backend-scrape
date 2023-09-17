@@ -1,0 +1,458 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml">
+<head>
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <meta http-equiv="Content-Type" content="text/html; charset=UTF-8" />
+  <title>Hamyan app</title>
+  <style type="text/css" rel="stylesheet" media="all">
+  /* Load fonts */
+  @font-face {
+    font-family: 'yekan';
+    src:url('http://cdn.font-store.ir/fonts/yekan/Yekan-Regular.woff2') format('woff2'),
+    url('http://cdn.font-store.ir/fonts/yekan/Yekan-Regular.woff') format('woff'),
+    url('http://cdn.font-store.ir/fonts/yekan/Yekan-Regular.ttf') format('truetype'),
+	url('http://cdn.font-store.ir/fonts/yekan/Yekan-Regular.otf') format('opentype');
+    font-weight: normal;
+    font-style: normal;
+}
+@font-face {
+    font-family: 'yekan';
+    src:url('http://cdn.font-store.ir/fonts/yekan/Yekan-Bold.woff2') format('woff2'),
+    url('http://cdn.font-store.ir/fonts/yekan/Yekan-Bold.woff') format('woff'),
+    url('http://cdn.font-store.ir/fonts/yekan/Yekan-Bold.ttf') format('truetype'),
+	url('http://cdn.font-store.ir/fonts/yekan/Yekan-Bold.otf') format('opentype');
+    font-weight: bold;
+    font-style: normal;
+}
+  /* Style.css */
+  body {
+	font-family: yekan ,roboto ,Arial !important;
+	direction: rtl;
+	background-color: #cdcdcd;
+	margin: 0;
+}
+h1, h2, h3, h4, h5, h6,input, textarea {
+	font-family: yekan ,roboto ,Arial !important;
+}
+h1 {
+	font-weight: bold;
+}
+.wrapper {
+	max-width: 900px;
+	margin: 0 auto;
+}
+.ltr {
+	direction: ltr;
+}
+.text-right {
+	text-align: right;
+}
+.text-center {
+	text-align: center;
+}
+.text-left {
+	text-align: left;
+}
+.text-small {
+	font-size: 0.8em;
+}
+.text-xsmall {
+	font-size: 0.6em;
+}
+.text-large {
+	font-size: 1.2em;
+}
+.text-xlarge {
+	font-size: 1.4em;
+}
+.text-underline {
+	text-decoration:underline;
+}
+.text-ultralight {
+	font-weight: 200;
+}
+.text-light {
+	font-weight: 300;
+}
+.text-regular {
+	font-weight: normal;
+}
+.text-medium {
+	font-weight: 500;
+}
+.text-bold {
+	font-weight: bold;
+}
+blockquote {
+	font-weight: 500;
+	padding: 10px;
+	border: 1px dashed #666666;
+}
+
+.mainbox {
+	width: 100%;
+	background-color: #EFEFEF;
+	display: table;
+	margin-bottom: 30px;
+	border-right: 8px solid #CCFF33;
+}
+
+.mainboxnegativ {
+	width: 100%;
+	background-color: #000000;
+	display: table;
+	margin-bottom: 30px;
+	border-right: 8px solid #CCFF33;
+	color: #F9F9F9;
+}
+
+.mainbox2 {
+	font-size: 1em;
+	width: 90%;
+	padding-right: 20px;
+	padding-top: 10px;
+	padding-bottom: 10px;
+}
+
+.mainbox3 {
+	width: 100%;
+	background-color: #DFDFDF;
+	display: table;
+	margin-bottom: 30px;
+	border-right: 8px solid #bd70ff;
+}
+
+.mainbox2negativ {
+	font-size: 1em;
+	color: #F9F9F9;
+	background-color: #000000;
+	padding-right: 20px;
+}
+
+.farsiparagraph {
+	font-size: 1em;
+	width: 47%;
+	float:right;
+	padding-right: 20px;
+	padding-top: 10px;
+	padding-bottom: 10px;
+
+}
+.englishparagraph {
+	font-size: 1em;
+	width: 47%;
+	float: left;
+	direction:ltr;
+	padding-left: 20px;
+	padding-top: 10px;
+	padding-bottom: 10px;
+
+
+}
+.rightbox {
+	width: 60%;
+	padding-right: 20px;
+	padding-left: 5px;
+	float: right;
+	margin-left: 10px;
+	margin-bottom: 0px;
+	min-width: 0px;
+	background-color: #F7F7F7;
+
+}
+
+.titelbox {
+	width: 60%;
+	padding-right: 25px;
+	padding-left: 0px;
+	float: right;
+	margin-left: 10px;
+	margin-bottom: 0px;
+	min-width: 0px;
+	background-color: #d5d5d5;
+	color: #4B4B4B;
+}
+
+
+.lefttbox {
+	
+	padding-right: 20px;
+	padding-left: 4px;
+	float: right;
+	margin-bottom: 10px;
+	min-width: 0px;
+}
+
+.alphabet {
+	width: 35%;
+	float: left;
+	font-size: 21em;
+	text-align: center;
+	font-weight: 500;
+	color: #999999;
+}
+
+.alphabet2 {
+	width: 35%;
+	float: left;
+	direction: ltr;
+	font-size: 1.6em;
+	text-align: left;
+	font-weight: 500;
+	color: #333333;
+	margin-top: 100px;
+}
+.footer {
+	font-weight: 300;
+	font-size: 0.7em;
+	text-align: center;
+	direction: ltr;
+	margin-bottom: 0px;
+	padding-bottom: 0px;
+}
+
+
+    /* Base ------------------------------ */
+    *:not(br):not(tr):not(html) {
+      -webkit-box-sizing: border-box;
+      box-sizing: border-box;
+    }
+    body {
+      width: 100% !important;
+      height: 100%;
+      margin: 0;
+      line-height: 1.4;
+      background-color: #F5F7F9;
+      color: #839197;
+      -webkit-text-size-adjust: none;
+    }
+    a {
+      color: #414EF9;
+    }
+
+    /* Layout ------------------------------ */
+    .email-wrapper {
+      width: 100%;
+      margin: 0;
+      padding: 0;
+      background-color: #74B743;
+    }
+    .email-content {
+      width: 100%;
+      margin: 0;
+      padding: 0;
+    }
+
+    /* Masthead ----------------------- */
+    .email-masthead {
+      padding: 25px 0;
+      text-align: center;
+    }
+    .email-masthead_logo {
+      max-width: 400px;
+      border: 0;
+    }
+    .email-masthead_name {
+      font-size: 25px;
+      font-weight: bold;
+      color: #fcfcfc;
+      text-decoration: none;
+      text-shadow: 0 1px 0 white;
+    }
+
+    /* Body ------------------------------ */
+    .email-body {
+      width: 100%;
+      margin: 0;
+      padding: 0;
+      border-top: 1px solid #E7EAEC;
+      border-bottom: 1px solid #E7EAEC;
+      background-color: #FFFFFF;
+    }
+    .email-body_inner {
+      width: 570px;
+      margin: 0 auto;
+      padding: 0;
+    }
+    .email-footer {
+      width: 570px;
+      margin: 0 auto;
+      padding: 0;
+      text-align: center;
+    }
+    .email-footer p {
+      color: #fcfcfc;
+    }
+    .body-action {
+      width: 100%;
+      margin: 30px auto;
+      padding: 0;
+      text-align: center;
+    }
+    .body-sub {
+      margin-top: 25px;
+      float: right;
+      padding-top: 25px;
+      border-top: 1px solid #E7EAEC;
+    }
+    .content-cell {
+      padding: 35px;
+    }
+    .align-right {
+      text-align: right;
+    }
+
+    /* Type ------------------------------ */
+    h1 {
+      margin-top: 0;
+      color: #292E31;
+      font-size: 19px;
+      font-weight: bold;
+      text-align: right;
+    }
+    h2 {
+      margin-top: 0;
+      color: #292E31;
+      font-size: 16px;
+      font-weight: bold;
+      text-align: right;
+    }
+    h3 {
+      margin-top: 0;
+      color: #292E31;
+      font-size: 14px;
+      font-weight: bold;
+      text-align: right;
+    }
+    p {
+      margin-top: 0;
+      color: #839197;
+      font-size: 16px;
+      line-height: 1.5em;
+      text-align: justify !important;
+      direction: rtl;
+    }
+    p.sub {
+      font-size: 12px;
+      text-align: right;
+    }
+    p.center {
+      text-align: center;
+    }
+
+    /* Buttons ------------------------------ */
+    .button {
+      display: inline-block;
+      width: 200px;
+      background-color: #414EF9;
+      border-radius: 3px;
+      color: #ffffff;
+      font-size: 15px;
+      line-height: 45px;
+      text-align: center;
+      text-decoration: none;
+      -webkit-text-size-adjust: none;
+      mso-hide: all;
+    }
+    .button--green {
+      background-color: #27A563;
+    }
+    .button--red {
+      background-color: #FF3665;
+    }
+    .button--blue {
+      background-color: #414EF9;
+    }
+
+    /*Media Queries ------------------------------ */
+    @media only screen and (max-width: 600px) {
+      .email-body_inner,
+      .email-footer {
+        width: 100% !important;
+      }
+    }
+    @media only screen and (max-width: 500px) {
+      .button {
+        width: 100% !important;
+      }
+    }
+  </style>
+</head>
+<body>
+  <table class="email-wrapper" width="100%" cellpadding="0" cellspacing="0">
+    <tr>
+      <td align="center">
+        <table class="email-content" width="100%" cellpadding="0" cellspacing="0">
+          <!-- Logo -->
+          <tr>
+            <td class="email-masthead">
+              <a class="email-masthead_name"> <img src="https://storage.backtory.com/hamyan/media/hamyan.png" style="max-width: 100px; max-height: 100px;"> </a>
+            </td>
+          </tr>
+          <!-- Email Body -->
+          <tr>
+            <td class="email-body" width="100%">
+              <table class="email-body_inner" align="center" width="570" cellpadding="0" cellspacing="0">
+                <!-- Body content -->
+                <tr>
+                  <td class="content-cell">
+                    <h1> لطفا ایمیل خود را تایید کنید  </h1>
+                    <br>
+                    <p> ایمیل شما در اپلیکیشن همیان برای انتقال حساب صندوقتان به حساب مدیر صندوق ثبت گردیده است.</p>
+                    <p>برای تأیید ایمیل خود روی لینک زیر کلیک کنید تا ادامه فرایند انتقال حساب صورت پذیرد.</p>
+                    <!-- Action -->
+                    <table class="body-action" align="right" width="100%" cellpadding="0" cellspacing="0">
+                      <tr>
+                        <td align="right">
+                          <div>
+                            <!--[if mso]><v:roundrect xmlns:v="urn:schemas-microsoft-com:vml" xmlns:w="urn:schemas-microsoft-com:office:word" href="{{action_url}}" style="height:45px;v-text-anchor:middle;width:200px;" arcsize="7%" stroke="f" fill="t">
+                            <v:fill type="tile" color="#414EF9" />
+                            <w:anchorlock/>
+                            <center style="color:#ffffff;font-family:sans-serif;font-size:15px;">Verify Email</center>
+                          </v:roundrect><![endif]-->
+                            <a href="{{action_url}}" class="button button--green">تایید ایمیل</a>
+                          </div>
+                        </td>
+                      </tr>
+                    </table>
+                    <p> با تشکر <br>پشتیبانی همیان</p>
+                    <!-- Sub copy -->
+                    <table class="body-sub">
+                      <tr>
+                        <td>
+                          <p class="sub">درصورتی که این ایمیل به اشتباه برای شما ارسال شده است آن را نادیده بگیرید.
+                          </p>
+                          <!-- <p class="sub"><a href="{{action_url}}">{{action_url}}</a></p> -->
+                        </td>
+                      </tr>
+                    </table>
+                  </td>
+                </tr>
+              </table>
+            </td>
+          </tr>
+          <tr>
+            <td>
+              <table class="email-footer" align="center" width="570" cellpadding="0" cellspacing="0">
+                <tr>
+                  <td class="content-cell">
+                    <p class="sub center">
+                      شرکت احسان گستران همیان 
+                      <br>تهران، بلوار ارتش غرب،فضای کار اشتراکی پارادایس‌هاب
+                      <br>
+                      شماره تماس:
+                      <br>
+                      <!-- 021-22819075 -->
+                      ۰۲۱-۲۲۸۱۹۰۷۵
+                    </p>
+                  </td>
+                </tr>
+              </table>
+            </td>
+          </tr>
+        </table>
+      </td>
+    </tr>
+  </table>
+</body>
+</html>

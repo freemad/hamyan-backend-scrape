@@ -1,0 +1,24 @@
+image: tiangolo/docker-with-compose
+
+before_script:
+  # - docker login -u gitlab-ci-token -p $CI_JOB_TOKEN $CI_REGISTRY
+  - docker login -u hamyan -p hamyanpasswd https://hmdocker.hamyanapp.com
+
+stages:
+  - build
+  - deploy
+
+build-prod:
+  stage: build
+  script:
+    - docker build . -t hmdocker.hamyanapp.com/hamyan-backend
+    - docker push hmdocker.hamyanapp.com/hamyan-backend
+  only:
+    - master
+
+deploy-prod:
+  stage: deploy
+  script:
+    - docker stack deploy -c docker-compose.yml --with-registry-auth backend
+  only:
+    - master

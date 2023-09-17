@@ -1,0 +1,255 @@
+version: '3.2'
+services:
+  # mysql:
+  #   image: mysql:latest
+  #   command:
+  #     - "--default-authentication-plugin=mysql_native_password"
+  #     - "--log-bin=/var/lib/mysql/mysql-bin.log"
+  #   networks:
+  #     - backend
+  #   environment:
+  #     MYSQL_ROOT_PASSWORD: pNFdaJuhQmhoMyzqbqnnrfSfZA1FlRwPb3kBGn8u
+  #   deploy:
+  #     placement:
+  #       constraints:
+  #         - node.role == manager
+  #   volumes:
+  #     - mysqlvolume:/var/lib/mysql
+  #     - ./mysql/master/scripts:/docker-entrypoint-initdb.d
+  #     - ./mysql/master/conf.d:/etc/mysql/conf.d
+
+  # mysql-slave:
+  #   image: mysql:latest
+  #   command:
+  #     - "--default-authentication-plugin=mysql_native_password"
+  #     - "--log-bin=/var/lib/mysql/mysql-bin.log"
+  #   networks:
+  #     - backend
+  #   environment:
+  #     MYSQL_ROOT_PASSWORD: pNFdaJuhQmhoMyzqbqnnrfSfZA1FlRwPb3kBGn8u
+  #   deploy:
+  #     placement:
+  #       constraints:
+  #         - node.role == manager
+  #   volumes:
+  #     - mysqlslavevolume:/var/lib/mysql
+  #     - ./mysql/slave/scripts:/docker-entrypoint-initdb.d
+  #     - ./mysql/slave/conf.d:/etc/mysql/conf.d
+  #   depends_on:
+  #     - mysql
+
+  redis:
+    image: redis
+    command: redis-server --requirepass ^passwd%
+    ports:
+      - 6379:6379
+    networks:
+      - traefik-public
+    deploy:
+      placement:
+        constraints:
+          - node.role == manager
+  
+  celery_beat:
+    image: hmdocker.hamyanapp.com/hamyan-backend
+    command: beat
+    networks:
+      - traefik-public
+      - backend
+    deploy:
+      replicas: 1
+      placement:
+        constraints:
+          - node.role == manager
+    environment:
+      - PHASE=production
+      - DB_HOST=mysql-master
+      - SLAVE_DB_HOST=mysql-slave
+      - DB_USER=root
+      - DB_PASSWORD=pNFdaJuhQmhoMyzqbqnnrfSfZA1FlRwPb3kBGn8u
+      - CACHE_HOST=redis:6379
+      - CACHE_PASSWORD=^passwd%
+      - MAIL_USER=hamyan@hamyanapp.com
+      - MAIL_PASSWORD=hamyanpasswd123
+      - MAIL_HOST=dmail.hamyanapp.com
+      - SMS_API_KEY=712F68416C36592F7075387372782B5247434E7130513D3D
+      - ANDROID_SERVER_KEY=AAAAfAISPL0:APA91bHGD4LFTvi_wwHhs2LZxSSry4O8q4PdV-dDaHXObR_JLYoqoaDjTLXxthk9r2IQ9HGmuAWW9jakvjuJx7wIrPXy4WCnH1KPKP1Q5Vl_C8QkY-p4za4Wu7rTJl730WC4XMyV_NQp
+      - IOS_SERVER_KEY=AAAAEucm1z4:APA91bFwNXiNoc7VCLrCK41skzDmwITYKSXun8Lx8mHHYhqVYOt_H-FbwKNlxWmkmFoBgyHfCTlkG-KzzdtGVhmylenkSHCtQhU0195LKzzXT4yIPzBdlojjeLtf9SAGibmcm6kbzSO6
+
+  celery_default:
+    image: hmdocker.hamyanapp.com/hamyan-backend
+    command: default_worker
+    networks:
+      - traefik-public
+      - backend
+    deploy:
+      placement:
+        constraints:
+          - node.role == manager
+    environment:
+      - PHASE=production
+      - DB_HOST=mysql-master
+      - SLAVE_DB_HOST=mysql-slave
+      - DB_USER=root
+      - DB_PASSWORD=pNFdaJuhQmhoMyzqbqnnrfSfZA1FlRwPb3kBGn8u
+      - CACHE_HOST=redis:6379
+      - CACHE_PASSWORD=^passwd%
+      - MAIL_USER=hamyan@hamyanapp.com
+      - MAIL_PASSWORD=hamyanpasswd123
+      - MAIL_HOST=dmail.hamyanapp.com
+      - SMS_API_KEY=712F68416C36592F7075387372782B5247434E7130513D3D
+      - ANDROID_SERVER_KEY=AAAAfAISPL0:APA91bHGD4LFTvi_wwHhs2LZxSSry4O8q4PdV-dDaHXObR_JLYoqoaDjTLXxthk9r2IQ9HGmuAWW9jakvjuJx7wIrPXy4WCnH1KPKP1Q5Vl_C8QkY-p4za4Wu7rTJl730WC4XMyV_NQp
+      - IOS_SERVER_KEY=AAAAEucm1z4:APA91bFwNXiNoc7VCLrCK41skzDmwITYKSXun8Lx8mHHYhqVYOt_H-FbwKNlxWmkmFoBgyHfCTlkG-KzzdtGVhmylenkSHCtQhU0195LKzzXT4yIPzBdlojjeLtf9SAGibmcm6kbzSO6
+
+  celery_high:
+    image: hmdocker.hamyanapp.com/hamyan-backend
+    command: high_worker
+    networks:
+      - traefik-public
+      - backend
+    deploy:
+      placement:
+        constraints:
+          - node.role == manager
+    environment:
+      - PHASE=production
+      - DB_HOST=mysql-master
+      - SLAVE_DB_HOST=mysql-slave
+      - DB_USER=root
+      - DB_PASSWORD=pNFdaJuhQmhoMyzqbqnnrfSfZA1FlRwPb3kBGn8u
+      - CACHE_HOST=redis:6379
+      - CACHE_PASSWORD=^passwd%
+      - MAIL_USER=hamyan@hamyanapp.com
+      - MAIL_PASSWORD=hamyanpasswd123
+      - MAIL_HOST=dmail.hamyanapp.com
+      - SMS_API_KEY=712F68416C36592F7075387372782B5247434E7130513D3D
+      - ANDROID_SERVER_KEY=AAAAfAISPL0:APA91bHGD4LFTvi_wwHhs2LZxSSry4O8q4PdV-dDaHXObR_JLYoqoaDjTLXxthk9r2IQ9HGmuAWW9jakvjuJx7wIrPXy4WCnH1KPKP1Q5Vl_C8QkY-p4za4Wu7rTJl730WC4XMyV_NQp
+      - IOS_SERVER_KEY=AAAAEucm1z4:APA91bFwNXiNoc7VCLrCK41skzDmwITYKSXun8Lx8mHHYhqVYOt_H-FbwKNlxWmkmFoBgyHfCTlkG-KzzdtGVhmylenkSHCtQhU0195LKzzXT4yIPzBdlojjeLtf9SAGibmcm6kbzSO6
+  flower:
+    image: hmdocker.hamyanapp.com/hamyan-backend
+    command: flower
+    networks:
+      - traefik-public
+    deploy:
+      placement:
+        constraints:
+          - node.role == manager
+      labels:
+        - "traefik.enable=true"
+        - "traefik.http.routers.flower.rule=Host(`flower.hamyanapp.com`)"
+        # - "traefik.http.routers.flower.middlewares=redirect-to-https"
+        - "traefik.http.routers.flower.entrypoints=websecure"
+        - "traefik.http.routers.flower.tls.certresolver=letsencryptresolver"
+        - "traefik.http.services.flower.loadbalancer.server.port=5555"
+
+    environment:
+      - PHASE=production
+      - DB_HOST=mysql-master
+      - SLAVE_DB_HOST=mysql-slave
+      - DB_USER=root
+      - DB_PASSWORD=pNFdaJuhQmhoMyzqbqnnrfSfZA1FlRwPb3kBGn8u
+      - CACHE_HOST=redis:6379
+      - CACHE_PASSWORD=^passwd%
+      - MAIL_USER=hamyan@hamyanapp.com
+      - MAIL_PASSWORD=hamyanpasswd123
+      - MAIL_HOST=dmail.hamyanapp.com
+      - SMS_API_KEY=712F68416C36592F7075387372782B5247434E7130513D3D
+      - ANDROID_SERVER_KEY=AAAAfAISPL0:APA91bHGD4LFTvi_wwHhs2LZxSSry4O8q4PdV-dDaHXObR_JLYoqoaDjTLXxthk9r2IQ9HGmuAWW9jakvjuJx7wIrPXy4WCnH1KPKP1Q5Vl_C8QkY-p4za4Wu7rTJl730WC4XMyV_NQp
+      - IOS_SERVER_KEY=AAAAEucm1z4:APA91bFwNXiNoc7VCLrCK41skzDmwITYKSXun8Lx8mHHYhqVYOt_H-FbwKNlxWmkmFoBgyHfCTlkG-KzzdtGVhmylenkSHCtQhU0195LKzzXT4yIPzBdlojjeLtf9SAGibmcm6kbzSO6
+    depends_on:
+      - celery_default
+      - celery_high
+
+  backend:
+    image: hmdocker.hamyanapp.com/hamyan-backend
+    command: backend
+    environment:
+        - PHASE=production
+        - DB_HOST=mysql-master
+        - SLAVE_DB_HOST=mysql-slave
+        - DB_USER=root
+        - DB_PASSWORD=pNFdaJuhQmhoMyzqbqnnrfSfZA1FlRwPb3kBGn8u
+        - CACHE_HOST=redis:6379
+        - CACHE_PASSWORD=^passwd%
+        - MAIL_USER=hamyan@hamyanapp.com
+        - MAIL_PASSWORD=hamyanpasswd123
+        - MAIL_HOST=dmail.hamyanapp.com
+        - SMS_API_KEY=712F68416C36592F7075387372782B5247434E7130513D3D
+        - ANDROID_SERVER_KEY=AAAAfAISPL0:APA91bHGD4LFTvi_wwHhs2LZxSSry4O8q4PdV-dDaHXObR_JLYoqoaDjTLXxthk9r2IQ9HGmuAWW9jakvjuJx7wIrPXy4WCnH1KPKP1Q5Vl_C8QkY-p4za4Wu7rTJl730WC4XMyV_NQp
+        - IOS_SERVER_KEY=AAAAEucm1z4:APA91bFwNXiNoc7VCLrCK41skzDmwITYKSXun8Lx8mHHYhqVYOt_H-FbwKNlxWmkmFoBgyHfCTlkG-KzzdtGVhmylenkSHCtQhU0195LKzzXT4yIPzBdlojjeLtf9SAGibmcm6kbzSO6
+
+    sysctls:
+      net.core.somaxconn: 1024
+
+    # ports:
+    #     - 8000:8000
+    networks:
+     - traefik-public
+     - backend
+    depends_on:
+      - redis
+      - celery_high
+      - mysql
+    # secrets:
+    #   - source: testkey
+    deploy:
+      placement:
+        constraints:
+          - node.role == manager
+      labels:
+        - "traefik.enable=true"
+        - "traefik.http.routers.backend.rule=Host(`gethamyan.ir`)"
+        # - "traefik.http.routers.backend.middlewares=redirect-to-https"
+        - "traefik.http.routers.backend.entrypoints=websecure"
+        - "traefik.http.routers.backend.tls.certresolver=letsencryptresolver"
+        - "traefik.http.services.backend.loadbalancer.server.port=8000"
+        # - "traefik.http.routers.backend.tls=true"
+        # - "traefik.http.routers.backend.tls.certresolver=myresolver"
+        # - "traefik.http.routers.backend.entrypoints=web"
+  shell:
+    image: hmdocker.hamyanapp.com/hamyan-backend
+    command: shell
+    environment:
+        - PHASE=production
+        - DB_HOST=mysql-master
+        - SLAVE_DB_HOST=mysql-slave
+        - DB_USER=root
+        - DB_PASSWORD=pNFdaJuhQmhoMyzqbqnnrfSfZA1FlRwPb3kBGn8u
+        - CACHE_HOST=redis:6379
+        - CACHE_PASSWORD=^passwd%
+        - SMS_API_KEY=712F68416C36592F7075387372782B5247434E7130513D3D
+    # ports:
+    #     - 8000:8000
+    networks:
+     - traefik-public
+     - backend
+    depends_on:
+      - redis
+      - celery_high
+    volumes:
+      - /opt/hamyan-backend/.jupyter:/root/.jupyter
+    deploy:
+      placement:
+        constraints:
+          - node.role == manager
+      labels:
+        - "traefik.enable=true"
+        - "traefik.http.routers.shell.rule=Host(`jp.hamyanapp.com`)"
+        # - "traefik.http.routers.shell.middlewares=redirect-to-https"
+        - "traefik.http.routers.shell.entrypoints=websecure"
+        - "traefik.http.routers.shell.tls.certresolver=letsencryptresolver"
+        - "traefik.http.services.shell.loadbalancer.server.port=8888"
+
+# secrets:
+#   testkey:
+#     external: true
+
+networks:
+  backend:
+  traefik-public:
+    external: true
+
+
+# volumes:
+#   mysqlvolume:
+#   mysqlslavevolume:
